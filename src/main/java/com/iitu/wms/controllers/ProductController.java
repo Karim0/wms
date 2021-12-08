@@ -20,6 +20,7 @@ import java.util.TreeMap;
 
 @Api(tags = {"Товары"}, description = "API для товара на складе")
 @RestController
+
 @RequestMapping(value = "/product")
 public class ProductController {
 
@@ -110,5 +111,23 @@ public class ProductController {
     @DeleteMapping("/deleteById")
     public void deleteProduct(@RequestParam(name = "id") Long id) {
         repository.delete(repository.getOne(id));
+    }
+
+    @ApiOperation("Изменить продукт")
+    @PostMapping("/updateById")
+    public void updateProduct(@RequestBody ProductEntity product) {
+      repository.findById(product.getId()).ifPresent(productEntity -> {
+        productEntity.setProduct_name(product.getProduct_name());
+        productEntity.setBar_code(product.getBar_code());
+        productEntity.setWeight(product.getWeight());
+        productEntity.setLength(product.getLength());
+        productEntity.setWidth(product.getWidth());
+        productEntity.setHeight(product.getHeight());
+        productEntity.setPrice(product.getPrice());
+
+        repository.save(productEntity);
+      });
+
+
     }
 }
